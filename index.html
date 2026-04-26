@@ -3,8 +3,91 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta name="google-site-verification" content="13m50mOK2AVhwwYyheGQI707vxVtFfehPy8lxr2yyCo" />
+<meta name="google-site-verification" content="13m50mOK2AVhwwYyheGQI707vxVtFfehPy8lxr2yyCo"/>
+<meta name="robots" content="index, follow"/>
+<meta name="author" content="Sanoop P S"/>
+<meta name="description" content="Sanoop P S — Senior Software Engineer with 5+ years building scalable e-commerce platforms. Adobe Certified Expert in Adobe Commerce. Specialises in PHP, Laravel, Magento 2, Python, Django and Akinon composable commerce. Based in Kannur, Kerala, India."/>
+<meta name="keywords" content="Sanoop P S, Senior Software Engineer, Adobe Commerce Developer, Magento 2, Laravel, PHP, Python, Django, Akinon, Filament, e-commerce, Kerala, India"/>
+
+<!-- Open Graph -->
+<meta property="og:type" content="profile"/>
+<meta property="og:url" content="https://cwsps154.github.io/CWSPS154/"/>
+<meta property="og:title" content="Sanoop P S — Senior Software Engineer"/>
+<meta property="og:description" content="5+ years building scalable e-commerce platforms. Adobe Certified Expert. PHP · Laravel · Magento 2 · Python · Django · Akinon."/>
+<meta property="og:locale" content="en_IN"/>
+<meta property="profile:first_name" content="Sanoop"/>
+<meta property="profile:last_name" content="P S"/>
+<meta property="profile:username" content="CWSPS154"/>
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Sanoop P S — Senior Software Engineer"/>
+<meta name="twitter:description" content="5+ years building scalable e-commerce platforms. Adobe Certified Expert. PHP · Laravel · Magento 2 · Python · Django · Akinon."/>
+
+<!-- Canonical -->
+<link rel="canonical" href="https://cwsps154.github.io/CWSPS154/"/>
+
 <title>Sanoop P S — Senior Software Engineer</title>
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Sanoop P S",
+  "alternateName": "CWSPS154",
+  "jobTitle": "Senior Software Engineer",
+  "description": "Senior Software Engineer with 5+ years building scalable e-commerce solutions. Adobe Certified Expert in Adobe Commerce. Specialises in PHP, Laravel, Magento 2, Adobe Commerce, Python, Django and Akinon composable commerce.",
+  "url": "https://cwsps154.github.io/CWSPS154/",
+  "email": "codewithsps154@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Kannur",
+    "addressRegion": "Kerala",
+    "addressCountry": "IN"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/in/sanoop-sahadevan-sps154",
+    "https://github.com/CWSPS154"
+  ],
+  "knowsAbout": ["PHP", "Laravel", "Magento 2", "Adobe Commerce", "Python", "Django", "Akinon", "Docker", "GraphQL", "MySQL", "PostgreSQL", "Redis", "Filament", "Livewire"],
+  "hasCredential": [
+    {
+      "@type": "EducationalOccupationalCredential",
+      "name": "Adobe Certified Expert — Adobe Commerce Developer",
+      "credentialCategory": "certification",
+      "url": "https://certification.adobe.com/credential/verify/6e244afa-b25d-11ef-8f8b-42010a40001c",
+      "recognizedBy": { "@type": "Organization", "name": "Adobe" }
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      "name": "Adobe Certified Professional — Adobe Commerce Developer",
+      "credentialCategory": "certification",
+      "url": "https://www.credly.com/badges/8e72c825-d3bb-42d6-8b4b-0aa669a68875/public_url",
+      "recognizedBy": { "@type": "Organization", "name": "Adobe" }
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      "name": "OWASP Security Fundamentals",
+      "credentialCategory": "certification",
+      "url": "https://www.credly.com/badges/f4616350-b96f-4e87-8d36-6200ed26425a/linked_in_profile",
+      "recognizedBy": { "@type": "Organization", "name": "O'Reilly / OWASP" }
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      "name": "Akinon Partner Enablement",
+      "credentialCategory": "certification",
+      "recognizedBy": { "@type": "Organization", "name": "Akinon" }
+    }
+  ],
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Codilar Technologies Pvt Ltd",
+    "url": "https://www.codilar.com/"
+  }
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
@@ -428,6 +511,13 @@
   .resume-desc { color: var(--muted); font-size: 0.95rem; }
   .resume-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
 
+  /* ── ACCESSIBILITY ── */
+  .sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+  }
+
   /* ── FOOTER ── */
   footer {
     padding: 2.5rem 2rem; text-align: center;
@@ -702,7 +792,7 @@
 <div id="scroll-progress"></div>
 
 <!-- NAV -->
-<nav>
+<nav aria-label="Main navigation">
   <a href="#hero" class="nav-logo" data-text="SPS_154">SPS<span>_</span><span>154</span></a>
   <ul class="nav-links" id="navLinks">
     <li><a href="#skills">Skills</a></li>
@@ -717,8 +807,11 @@
   </div>
 </nav>
 
+<!-- MAIN CONTENT -->
+<main id="main-content">
+
 <!-- HERO -->
-<section id="hero">
+<section id="hero" aria-label="Introduction">
   <div class="hero-glow"></div>
   <div class="hero-glow2"></div>
   <div class="hero-inner">
@@ -749,7 +842,7 @@
 </section>
 
 <!-- SKILLS -->
-<section id="skills">
+<section id="skills" aria-label="Core Skills">
   <div class="container">
     <div class="section-label">What I work with</div>
     <h2 class="section-title">Core <span>Skills</span></h2>
@@ -828,7 +921,7 @@
 </section>
 
 <!-- EXPERIENCE -->
-<section id="experience">
+<section id="experience" aria-label="Work Experience">
   <div class="container">
     <div class="section-label">Where I've worked</div>
     <h2 class="section-title">Work <span>Experience</span></h2>
@@ -900,7 +993,7 @@
 </section>
 
 <!-- PROJECTS -->
-<section id="projects">
+<section id="projects" aria-label="Key Projects">
   <div class="container">
     <div class="section-label">What I've built</div>
     <h2 class="section-title">Key <span>Projects</span></h2>
@@ -989,7 +1082,7 @@
 </section>
 
 <!-- OPEN SOURCE -->
-<section id="opensource">
+<section id="opensource" aria-label="Open Source Contributions">
   <div class="container">
     <div class="section-label">Community contributions</div>
     <h2 class="section-title">Open <span>Source</span></h2>
@@ -1042,15 +1135,15 @@
 </section>
 
 <!-- CERTIFICATIONS -->
-<section id="certifications">
+<section id="certifications" aria-label="Certifications">
   <div class="container">
     <div class="section-label">Credentials</div>
-    <h2 class="section-title">Certifi<span>cations</span></h2>
+    <h2 class="section-title">Certifi<span>cations</span><span class="sr-only"> — Adobe, Akinon, OWASP</span></h2>
     <div class="certs-grid">
 
       <div class="cert-card reveal">
         <div class="cert-icon adobe">
-          <img src="logos/adobe.svg" alt="Adobe"/>
+          <img src="logos/adobe.svg" alt="Adobe logo"/>
         </div>
         <div>
           <div class="cert-name">Adobe Certified Expert</div>
@@ -1062,7 +1155,7 @@
 
       <div class="cert-card reveal">
         <div class="cert-icon adobe">
-          <img src="logos/adobe.svg" alt="Adobe"/>
+          <img src="logos/adobe.svg" alt="Adobe logo"/>
         </div>
         <div>
           <div class="cert-name">Adobe Certified Professional</div>
@@ -1074,7 +1167,7 @@
 
       <div class="cert-card reveal">
         <div class="cert-icon akinon">
-          <img src="logos/akinon.svg" alt="Akinon"/>
+          <img src="logos/akinon.svg" alt="Akinon logo"/>
         </div>
         <div>
           <div class="cert-name">Akinon Partner Enablement</div>
@@ -1086,7 +1179,7 @@
 
       <div class="cert-card reveal">
         <div class="cert-icon owasp">
-          <img src="logos/owasp.svg" alt="OWASP"/>
+          <img src="logos/owasp.svg" alt="OWASP logo"/>
         </div>
         <div>
           <div class="cert-name">OWASP Security Fundamentals</div>
@@ -1101,7 +1194,7 @@
 </section>
 
 <!-- RESUME DOWNLOAD -->
-<section id="resume">
+<section id="resume" aria-label="Download Resume">
   <div class="container">
     <div class="resume-box">
       <div class="resume-icon">
@@ -1122,12 +1215,14 @@
 </section>
 
 <!-- FOOTER -->
+</main><!-- /main-content -->
+
 <footer>
-  <div class="footer-links">
-    <a href="mailto:codewithsps154@gmail.com" class="footer-link">✉ codewithsps154@gmail.com</a>
-    <a href="https://github.com/CWSPS154" target="_blank" class="footer-link">⌥ github.com/CWSPS154</a>
-    <a href="https://www.linkedin.com/in/sanoop-sahadevan-sps154" target="_blank" class="footer-link">in LinkedIn</a>
-  </div>
+  <address class="footer-links" style="font-style:normal;">
+    <a href="mailto:codewithsps154@gmail.com" class="footer-link" rel="me">✉ codewithsps154@gmail.com</a>
+    <a href="https://github.com/CWSPS154" target="_blank" rel="me noopener" class="footer-link">⌥ github.com/CWSPS154</a>
+    <a href="https://www.linkedin.com/in/sanoop-sahadevan-sps154" target="_blank" rel="me noopener" class="footer-link">in LinkedIn</a>
+  </address>
   <div class="footer-copy">© 2026 Sanoop P S · Built with ♥ in Kannur, Kerala</div>
 </footer>
 
