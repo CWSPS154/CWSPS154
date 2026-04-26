@@ -104,7 +104,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=optional" rel="stylesheet"/>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=optional" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=optional" rel="stylesheet"/></noscript>
 <style>
   /* ── VARIABLES ── */
   :root {
@@ -576,14 +577,51 @@
      ENHANCED ANIMATIONS & INTERACTIONS
      ═══════════════════════════════════════ */
 
+  /* ── SCROLL TO TOP ── */
+  #scroll-top {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 890;
+    width: 44px; height: 44px;
+    background: var(--card);
+    border: 1.5px solid var(--accent)60;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(16px) scale(0.85);
+    will-change: transform, opacity;
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                border-color 0.2s ease, box-shadow 0.2s ease;
+    pointer-events: none;
+    box-shadow: 0 4px 20px #00000040;
+  }
+  #scroll-top.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  #scroll-top:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 18px var(--accent)50, 0 4px 24px #00000050;
+    transform: translateY(-2px) scale(1.08);
+  }
+  #scroll-top svg {
+    width: 18px; height: 18px;
+    stroke: var(--accent);
+    transition: transform 0.2s ease;
+  }
+  #scroll-top:hover svg { transform: translateY(-2px); }
+
   /* ── SCROLL PROGRESS ── */
   #scroll-progress {
     position: fixed; top: 0; left: 0; z-index: 9999;
-    height: 2px; width: 0%;
+    height: 2px; width: 100%;
+    transform-origin: left;
+    transform: scaleX(0);
     background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
     box-shadow: 0 0 12px var(--accent), 0 0 24px var(--accent)50;
     pointer-events: none;
-    transition: width 0.08s linear;
+    will-change: transform;
+    transition: transform 0.08s linear;
   }
 
   /* ── CUSTOM CURSOR ── */
@@ -592,24 +630,23 @@
     width: 40px; height: 40px;
     border: 1.5px solid var(--accent)90;
     border-radius: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 0;
+    will-change: transform, opacity;
     transition: opacity 0.4s,
-      width  0.28s cubic-bezier(0.22,1,0.36,1),
-      height 0.28s cubic-bezier(0.22,1,0.36,1),
+      transform 0.28s cubic-bezier(0.22,1,0.36,1),
       border-radius 0.28s cubic-bezier(0.22,1,0.36,1),
-      border-color 0.22s ease,
-      border-width 0.22s ease;
+      border-color 0.22s ease;
   }
   .cursor-dot {
     position: fixed; pointer-events: none; z-index: 9998;
     width: 7px; height: 7px;
     background: var(--accent);
     border-radius: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 0;
-    transition: opacity 0.4s, width 0.2s, height 0.2s,
-      background 0.2s, box-shadow 0.2s;
+    will-change: transform, opacity;
+    transition: opacity 0.4s, transform 0.2s, background 0.2s, box-shadow 0.2s;
     box-shadow: 0 0 12px var(--accent), 0 0 20px var(--accent)60;
   }
   /* floating label near cursor on link hover */
@@ -631,19 +668,18 @@
   .has-cursor, .has-cursor * { cursor: none !important; }
   .cursor-ring.on  { opacity: 1; }
   .cursor-dot.on   { opacity: 1; }
-  /* card / button hover → big circle */
-  .cursor-ring.big { width: 56px; height: 56px; border-color: var(--accent2); opacity: 0.5; }
-  .cursor-dot.big  { width: 4px; height: 4px; }
-  /* link hover → pill morph */
+  /* card / button hover → big circle via scale */
+  .cursor-ring.big { transform: translate(-50%, -50%) scale(1.4); border-color: var(--accent2); opacity: 0.5; }
+  .cursor-dot.big  { transform: translate(-50%, -50%) scale(0.57); }
+  /* link hover → pill morph via scale */
   .cursor-ring.link {
-    width: 54px; height: 22px;
+    transform: translate(-50%, -50%) scaleX(1.35) scaleY(0.55);
     border-radius: 11px;
     border-color: var(--accent2);
-    border-width: 1.5px;
     opacity: 0.85;
   }
   .cursor-dot.link {
-    width: 6px; height: 6px;
+    transform: translate(-50%, -50%) scale(0.86);
     background: var(--accent2);
     box-shadow: 0 0 10px var(--accent2), 0 0 22px var(--accent2)80;
   }
@@ -693,16 +729,18 @@
   /* ── CERT HOLOGRAPHIC ── */
   .cert-card { position: relative; overflow: hidden; }
   .cert-card::after {
-    content: ''; position: absolute; inset: 0;
+    content: ''; position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(110deg,
-      transparent 25%, rgba(255,107,53,0.05) 37%,
-      rgba(62,207,207,0.07) 50%, rgba(168,85,247,0.05) 63%, transparent 75%);
-    background-size: 200% 200%;
+      transparent 20%, rgba(255,107,53,0.08) 40%,
+      rgba(62,207,207,0.10) 50%, rgba(168,85,247,0.08) 60%, transparent 80%);
     animation: holo 5s ease infinite;
+    will-change: transform;
     pointer-events: none; opacity: 0; transition: opacity 0.4s;
+    transform: translateX(-100%);
   }
   .cert-card:hover::after { opacity: 1; }
-  @keyframes holo { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  @keyframes holo { 0%,100% { transform: translateX(-100%); } 50% { transform: translateX(100%); } }
 
   /* ── SKILL TAG LIT ── */
   .skill-tag { transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s; }
@@ -807,7 +845,7 @@
 
 <!-- NAV -->
 <nav aria-label="Main navigation">
-  <a href="#hero" class="nav-logo" data-text="SPS_154">SPS<span>_</span><span>154</span></a>
+  <a href="#hero" class="nav-logo" data-text="CWSPS154"><span>CW</span>SPS<span>154</span></a>
   <ul class="nav-links" id="navLinks">
     <li><a href="#skills">Skills</a></li>
     <li><a href="#experience">Experience</a></li>
@@ -1231,6 +1269,12 @@
 <!-- FOOTER -->
 </main><!-- /main-content -->
 
+<button id="scroll-top" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 19V5"/><path d="M5 12l7-7 7 7"/>
+  </svg>
+</button>
+
 <footer>
   <address class="footer-links" style="font-style:normal;">
     <a href="mailto:codewithsps154@gmail.com" class="footer-link" rel="me">✉ codewithsps154@gmail.com</a>
@@ -1314,14 +1358,19 @@
      ENHANCED INTERACTIONS
      ═══════════════════════════════════════ */
 
-  // ── SCROLL PROGRESS + NAV SCROLLED ──
+  // ── SCROLL PROGRESS + NAV SCROLLED + SCROLL-TO-TOP ──
   const progressBar = document.getElementById('scroll-progress');
   const navEl = document.querySelector('nav');
+  const scrollTopBtn = document.getElementById('scroll-top');
   window.addEventListener('scroll', () => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = (window.scrollY / max * 100) + '%';
+    progressBar.style.transform = 'scaleX(' + (window.scrollY / max) + ')';
     navEl.classList.toggle('scrolled', window.scrollY > 60);
+    scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
   }, { passive: true });
+  scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 
   // ── NAV ACTIVE SECTION ──
   const secObserver = new IntersectionObserver((entries) => {
@@ -1433,11 +1482,14 @@
       el.addEventListener('mouseenter', () => setCursor('card'));
       el.addEventListener('mouseleave', () => setCursor('default'));
     });
+    // Pre-cache cursor colors once at init to avoid getComputedStyle on every mouseenter
+    const cursorColorCache = new Map();
     document.querySelectorAll('a').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        const c = getComputedStyle(el).getPropertyValue('--cursor-color').trim() || '#3ecfcf';
-        setCursor('link', c);
-      });
+      const c = getComputedStyle(el).getPropertyValue('--cursor-color').trim();
+      cursorColorCache.set(el, c || '#3ecfcf');
+    });
+    document.querySelectorAll('a').forEach(el => {
+      el.addEventListener('mouseenter', () => setCursor('link', cursorColorCache.get(el)));
       el.addEventListener('mouseleave', () => setCursor('default'));
     });
   }
@@ -1458,9 +1510,14 @@
   // ── CARD 3D TILT + SPOTLIGHT ──
   document.querySelectorAll('.project-card, .oss-card, .cert-card').forEach(card => {
     const isCert = card.classList.contains('cert-card');
-    card.addEventListener('mouseenter', () => { card.style.willChange = 'transform'; });
+    let cardRect = null;
+    card.addEventListener('mouseenter', () => {
+      cardRect = card.getBoundingClientRect();
+      card.style.willChange = 'transform';
+    });
     card.addEventListener('mousemove', (e) => {
-      const r  = card.getBoundingClientRect();
+      const r  = cardRect;
+      if (!r) return;
       const x  = e.clientX - r.left, y = e.clientY - r.top;
       const cx = r.width / 2,       cy = r.height / 2;
       const rY =  ((x - cx) / cx) * 9;
@@ -1472,6 +1529,7 @@
       }
     });
     card.addEventListener('mouseleave', () => {
+      cardRect = null;
       card.style.transform = '';
       card.style.willChange = '';
       card.style.removeProperty('--mx');
@@ -1481,13 +1539,16 @@
 
   // ── MAGNETIC BUTTONS ──
   document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
+    let btnRect = null;
+    btn.addEventListener('mouseenter', () => { btnRect = btn.getBoundingClientRect(); });
     btn.addEventListener('mousemove', (e) => {
-      const r = btn.getBoundingClientRect();
+      const r = btnRect;
+      if (!r) return;
       const x = (e.clientX - r.left - r.width  / 2) * 0.22;
       const y = (e.clientY - r.top  - r.height / 2) * 0.22;
       btn.style.transform = `translate(${x}px, ${y - 2}px)`;
     });
-    btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    btn.addEventListener('mouseleave', () => { btnRect = null; btn.style.transform = ''; });
   });
 
   // ── SKILL TAG STAGGER ──
