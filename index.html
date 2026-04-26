@@ -823,10 +823,13 @@
   .footer-link { position: relative; }
   .footer-link::after {
     content: ''; position: absolute;
-    bottom: -2px; left: 0; width: 0; height: 1px;
-    background: var(--accent); transition: width 0.35s ease;
+    bottom: -2px; left: 0; width: 100%; height: 1px;
+    background: var(--accent);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.35s ease;
   }
-  .footer-link:hover::after { width: 100%; }
+  .footer-link:hover::after { transform: scaleX(1); }
 
   /* ── CHAR REVEAL ── */
   .char-reveal {
@@ -835,8 +838,8 @@
     animation: charFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   @keyframes charFadeUp {
-    from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
-    to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 </style>
 </head>
@@ -1296,12 +1299,12 @@
     const configs = [
       { sel: '.section-label', props: { x: -22 },                      dur: 560, base: 0   },
       { sel: '.section-title', props: { y: 22  },                      dur: 680, base: 90  },
-      { sel: '.skill-card',    props: { y: 34, scale: 0.94, blur: 4 }, dur: 600, stagger: 70  },
-      { sel: '.timeline-item', props: { x: -32 },                      dur: 680, stagger: 110 },
-      { sel: '.project-card',  props: { y: 38, scale: 0.95, blur: 4 }, dur: 650, stagger: 85  },
-      { sel: '.oss-card',      props: { y: 30, scale: 0.95, blur: 3 }, dur: 600, stagger: 75  },
-      { sel: '.cert-card',     props: { y: 26, scale: 0.96 },          dur: 580, stagger: 60  },
-      { sel: '.resume-box',    props: { y: 32, scale: 0.95, blur: 5 }, dur: 720, base: 0   },
+      { sel: '.skill-card',    props: { y: 34, scale: 0.94 }, dur: 600, stagger: 70  },
+      { sel: '.timeline-item', props: { x: -32 },            dur: 680, stagger: 110 },
+      { sel: '.project-card',  props: { y: 38, scale: 0.95 }, dur: 650, stagger: 85  },
+      { sel: '.oss-card',      props: { y: 30, scale: 0.95 }, dur: 600, stagger: 75  },
+      { sel: '.cert-card',     props: { y: 26, scale: 0.96 }, dur: 580, stagger: 60  },
+      { sel: '.resume-box',    props: { y: 32, scale: 0.95 }, dur: 720, base: 0   },
       { sel: '.footer-links',  props: { y: 18 },                       dur: 600, base: 0   },
       { sel: '.footer-copy',   props: { y: 12 },                       dur: 600, base: 110 },
     ];
@@ -1324,28 +1327,19 @@
 
           el.style.animation  = 'none';
           el.style.opacity    = '0';
-          if (tx.length)   el.style.transform = tx.join(' ');
-          if (props.blur)  el.style.filter    = `blur(${props.blur}px)`;
+          if (tx.length) el.style.transform = tx.join(' ');
           el.style.transition = [
             `opacity ${dur}ms ${EASE}`,
-            tx.length  ? `transform ${dur}ms ${EASE}` : '',
-            props.blur ? `filter ${dur}ms ${EASE}`    : '',
+            tx.length ? `transform ${dur}ms ${EASE}` : '',
           ].filter(Boolean).join(', ');
 
           new IntersectionObserver(([entry], obs) => {
             if (!entry.isIntersecting) return;
             setTimeout(() => {
               el.style.opacity   = '1';
-              el.style.transform = 'translateY(0)';
-              el.style.filter    = 'none';
+              el.style.transform = 'none';
               el.classList.add('visible');
-              // Only remove filter + transition so CSS hover effects restore.
-              // Keep opacity:1, transform:translateY(0), animation:none permanently
-              // so the CSS fadeUp can never replay and there is no re-transition.
-              setTimeout(() => {
-                el.style.removeProperty('filter');
-                el.style.removeProperty('transition');
-              }, dur + 80);
+              setTimeout(() => el.style.removeProperty('transition'), dur + 80);
             }, delay);
             obs.disconnect();
           }, { threshold: 0.1 }).observe(el);
@@ -1362,11 +1356,16 @@
   const progressBar = document.getElementById('scroll-progress');
   const navEl = document.querySelector('nav');
   const scrollTopBtn = document.getElementById('scroll-top');
+  // Cache scroll max to avoid forced layout on every scroll event
+  let scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+  window.addEventListener('resize', () => {
+    scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+  }, { passive: true });
   window.addEventListener('scroll', () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.transform = 'scaleX(' + (window.scrollY / max) + ')';
-    navEl.classList.toggle('scrolled', window.scrollY > 60);
-    scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+    const sy = window.scrollY;
+    progressBar.style.transform = 'scaleX(' + (sy / scrollMax) + ')';
+    navEl.classList.toggle('scrolled', sy > 60);
+    scrollTopBtn.classList.toggle('visible', sy > 400);
   }, { passive: true });
   scrollTopBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1414,9 +1413,12 @@
   // ── HERO MOUSE PARALLAX ──
   const hg1 = document.querySelector('.hero-glow');
   const hg2 = document.querySelector('.hero-glow2');
+  // Cache viewport dims — reading innerWidth/Height on every mousemove forces layout
+  let vpW = window.innerWidth, vpH = window.innerHeight;
+  window.addEventListener('resize', () => { vpW = window.innerWidth; vpH = window.innerHeight; }, { passive: true });
   document.addEventListener('mousemove', (e) => {
-    const x = (e.clientX / window.innerWidth  - 0.5) * 28;
-    const y = (e.clientY / window.innerHeight - 0.5) * 28;
+    const x = (e.clientX / vpW - 0.5) * 28;
+    const y = (e.clientY / vpH - 0.5) * 28;
     if (hg1) hg1.style.transform = `translate(${x}px, ${y}px)`;
     if (hg2) hg2.style.transform = `translate(${-x * 0.6}px, ${-y * 0.6}px)`;
   }, { passive: true });
